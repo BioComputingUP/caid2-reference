@@ -1,4 +1,4 @@
-# **caid2-references**
+# **caid2-reference**
 References used in CAID2.
 
 
@@ -12,11 +12,11 @@ cd <root-of-repository>; pyenv local 3.10.2
 
 # **Environment**
 ```bash
-python -m venv .caid2_references3102 --prompt="caid2_references3102"
+python -m venv .caid2_reference3102 --prompt="caid2_reference3102"
 ```
 ## **Activate the environment**
 ```bash
-source .caid2_references3102/bin/activate
+source .caid2_reference3102/bin/activate
 ```
 
 ## **Python libs**
