@@ -20,8 +20,8 @@ source .caid2_reference3102/bin/activate
 ```
 
 ## **Python libs**
-Use `requierements.txt` to replicate the environment.
+Use `requirements.txt` to replicate the environment.
 ```bash
-pip install -r src/requierements.txt
+pip install -r src/requirements.txt
 ```
 
