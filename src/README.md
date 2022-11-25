@@ -9,10 +9,11 @@ AlphaFoldDB. The notebook contains instruction about how to extract the disorder
 predictions in CAID fromat
 
 ## homology
-Parse the blast output and extract information about the best match.
-Comparison are between CAID and DisProt "old" data and between
+Parse the blast output, extract information about the best match and perform optimal 
+pairwise alignments.
+Comparison are between CAID and DisProt "old" and between
 CAID and PDB seqres.
-The notebook contains instructions about how to run BLAST
+The notebook also contains instructions about how to run BLAST
 
 # homology_plot
 Generate plots from the output of the homology notebook
@@ -29,3 +30,5 @@ different challenges (this might be removed in the future) and the assessment
 # reference_merge_analysis
 Generate figures comparing predictions and references, one for each target
 
+# predictions_mobidblite
+Instruction to generate MobiDB-lite predictions
