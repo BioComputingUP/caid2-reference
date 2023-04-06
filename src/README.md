@@ -13,7 +13,8 @@ Or using the download service from the website (lastest annotations might not be
 ```bash
 # 20 Nov 2022
 mongoexport -d disprot8 -c entries_2022_06 -o disprot_entries_2022_06.mjson
-mongoexport -d disprot8 -c entries_2022_12_c -o disprot_entries_2022_12_c.mjson
+# mongoexport -d disprot8 -c entries_2022_12_c -o disprot_entries_2022_12_c.mjson
+mongoexport -d disprot8 -c entries_2023_06_c -o disprot_entries_2023_06_c.mjson
 scp moros:disprot_entries* .
 
 # Download data (20 Nov 2022)
