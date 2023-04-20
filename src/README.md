@@ -62,14 +62,8 @@ Generate statistics about the references
 ## references_merge
 Combine predictions with reference data.
 It requires the predictions, the references, the mapping of predictions to the
-different challenges (this might be removed in the future) and the assessment
+different challenges and the assessment
 (F1-score) one for each reference
-
-```bash
-scp -r urano:/projects/CAID2/results data/assessment_results
-scp -r urano:/projects/CAID2/predictions data/predictions
-```
-Also, save the 
 
 ## reference_merge_analysis
 Generate figures comparing predictions and references, one for each target
@@ -78,7 +72,7 @@ Generate figures comparing predictions and references, one for each target
 Given the list of targets in the references, it retrieves the predicted structures from
 AlphaFoldDB. 
 
-Then you can generate disorde and binding predictions
+Then you can generate disorder and binding predictions
 with the [AlphaFold-disorder](https://github.com/BioComputingUP/AlphaFold-disorder)
 package:
 
