@@ -2,22 +2,25 @@
 
 ```bash
 # Generate the folder structure
-mkdir -p data/{disprot,sifts,alphafold,output/{references,references_stat,references_merge_analysis,homology}}
+mkdir -p data/{disprot,sifts,alphafold,output/{references,references_stat,references_merge_analysis,homology,new_taxdump}}
 ````
 
 ## references
 Generate the references from two snapshots of the DisProt database (mongo export)
 DisProt data can be obtained directly exporting the relevant database collections (ask the developers). 
-Or using the download service from the website (lastest annotations might not be available to the public). Note the formats are slightly different.
+Or using the download service from the website (lastest annotations might not be available to the public). 
+Note the formats are slightly different.
+
+## Download DisProt data
+Use MongoDB compass and download the current public collection and
+the current "curators" collections.
+
+Public 2023_12
+Current 2024_06_c
+
 
 ```bash
-# 20 Nov 2022
-mongoexport -d disprot8 -c entries_2022_06 -o disprot_entries_2022_06.mjson
-# mongoexport -d disprot8 -c entries_2022_12_c -o disprot_entries_2022_12_c.mjson
-mongoexport -d disprot8 -c entries_2023_06_c -o disprot_entries_2023_06_c.mjson
-scp moros:disprot_entries* .
-
-# Download data (20 Nov 2022)
+# Download data (26 Mar 2024)
 wget -O data/sifts/uniprot_segments_observed.tsv.gz ftp://ftp.ebi.ac.uk/pub/databases/msd/sifts/flatfiles/tsv/uniprot_segments_observed.tsv.gz
 wget -O data/disprot/go-basic.obo http://purl.obolibrary.org/obo/go/go-basic.obo
 ```
@@ -28,27 +31,22 @@ pairwise alignments.
 Comparison are between CAID and DisProt "old" and between
 CAID and PDB seqres.
 
-Generate BLAST alignments of the new DisProt against the old DisProt and against PDB seqres
-Install blast on your home (check the version and paths)
-```
-wget https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.13.0+-x64-linux.tar.gz
-tar -xf ncbi-blast-2.13.0+-x64-linux.tar.gz
-export PATH="/home/$USER/ncbi-blast-2.13.0+/bin:$PATH" 
-```
-Download PDB seqres
-```
-wget https://ftp.wwpdb.org/pub/pdb/derived_data/pdb_seqres.txt.gz -O data/output/homology/pdb_seqres.txt.gz
-gunzip data/output/homology/pdb_seqres.txt.gz
-```
+```bash
+# Generate BLAST alignments of the new DisProt against the old DisProt and against PDB seqres
+# Install blast on your home (check the version and paths)
+wget https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.15.0+-x64-linux.tar.gz
+tar -xf ncbi-blast-2.15.0+-x64-linux.tar.gz
+export PATH="/home/$USER/ncbi-blast-2.15.0+/bin:$PATH" 
 
-Make dbs
-```
+# Download PDB seqres
+wget https://files.wwpdb.org/pub/pdb/derived_data/pdb_seqres.txt.gz -O data/output/homology/pdb_seqres.txt.gz
+gunzip data/output/homology/pdb_seqres.txt.gz
+
+# Make blast dbs
 makeblastdb -in data/output/homology/disprot_old.fasta -dbtype prot
 makeblastdb -in data/output/homology/pdb_seqres.txt -dbtype prot
-```
 
-Run BLAST
-```
+# Run BLAST
 blastp -db data/output/homology/disprot_old.fasta -query data/output/homology/disprot_new.fasta -out data/output/homology/disprot_new_old.blast -outfmt 6 -num_threads 12
 blastp -db data/output/homology/pdb_seqres.txt -query data/output/homology/disprot_new.fasta -out data/output/homology/disprot_new_pdb.blast -outfmt 6 -num_threads 12
 ```
@@ -59,6 +57,12 @@ Generate plots from the output of the homology notebook
 ## references_stat
 Generate statistics about the references
 
+```bash
+# Download taxonomy data
+wget -O data/new_taxdump.tar.gz  ftp://ftp.ncbi.nih.gov/pub/taxonomy/new_taxdump/new_taxdump.tar.gz
+tar -xf data/new_taxdump.tar.gz -C data/new_taxdump
+```
+
 ## references_merge
 Combine predictions with reference data.
 It requires the predictions, the references, the mapping of predictions to the
@@ -67,35 +71,4 @@ different challenges and the assessment
 
 ## reference_merge_analysis
 Generate figures comparing predictions and references, one for each target
-
-## predictions_alphafold
-Given the list of targets in the references, it retrieves the predicted structures from
-AlphaFoldDB. 
-
-Then you can generate disorder and binding predictions
-with the [AlphaFold-disorder](https://github.com/BioComputingUP/AlphaFold-disorder)
-package:
-
-```bash
-python3 alphafold_disorder.py -i ../caid2-reference/data/alphafold/download/ -o ../caid2-reference/data/alphafold/af -dssp=dssp-2.3.0/mkdssp
-python3 alphafold_disorder.py -i ../caid2-reference/data/alphafold/download/ -o ../caid2-reference/data/alphafold/af -dssp=dssp-2.3.0/mkdssp -f caid
-```
-
-## predictions_mobidblite
-Instruction to generate MobiDB-lite predictions
-
-Generate input. The disorder reference contains all targets, by definition
-```bash
-grep -A1 ">" --no-group-separator ../data/output/references/disorder.fasta > disorder.fasta
-```
-Generate predictions with [MobiDB-lite](https://github.com/BioComputingUP/MobiDB-lite) package.
-```bash
-module load mobidb-lite/latest
-time mobidb_lite.py disorder.fasta -fc -sf -f caid > MobiDB-lite_all.caid
-```
-
-Extract mobidb_lite predictions, remove other methods
-```bash
-awk '{if (substr($1,1,1) == ">") {start=0}; if ($2=="mobidb_lite") {start=1}; if (start==1) print $0}' MobiDB-lite_all.caid > MobiDB-lite.caid
-```
 
