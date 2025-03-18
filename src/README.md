@@ -16,11 +16,14 @@ Use MongoDB compass and download the current public collection and
 the current "curators" collections.
 
 Public 2023_12
-Current 2024_06_c
+Current 2024_12_c (29 Oct 2024)
+
+For the CAID3 CASP-16 dataset
+mongoexport --uri "mongodb://moros:27017/disprot8" --collection entries_2024_12_c > data/disprot/disprot8.entries_2024_12_c.json
 
 
 ```bash
-# Download data (26 Mar 2024)
+# Download data
 wget -O data/sifts/uniprot_segments_observed.tsv.gz ftp://ftp.ebi.ac.uk/pub/databases/msd/sifts/flatfiles/tsv/uniprot_segments_observed.tsv.gz
 wget -O data/disprot/go-basic.obo http://purl.obolibrary.org/obo/go/go-basic.obo
 ```
