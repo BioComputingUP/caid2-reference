@@ -12,18 +12,16 @@ Or using the download service from the website (lastest annotations might not be
 Note the formats are slightly different.
 
 ## Download DisProt data
-Use MongoDB compass and download the current public collection and
-the current "curators" collections.
+Use MongoDB compass and download the current public collection and the current "curators" collections.
 
-Public 2023_12
-Current 2024_12_c (29 Oct 2024)
-
-For the CAID3 CASP-16 dataset
-mongoexport --uri "mongodb://moros:27017/disprot8" --collection entries_2024_12_c > data/disprot/disprot8.entries_2024_12_c.json
-
+* Public 2024_12      # public at the time predictors submitted their software
+* Current 2025_06_c   # 1 July 2025, 15:55 CEST
 
 ```bash
-# Download data
+# Dowload CAID3 dataset (only working inside BioComputin UP lab LAN)
+mongoexport --uri "mongodb://moros:27017/disprot8" --collection entries_2025_06_c > data/disprot/disprot8.entries_2025_06_c.json
+
+# Download data from SIFTS and GO
 wget -O data/sifts/uniprot_segments_observed.tsv.gz ftp://ftp.ebi.ac.uk/pub/databases/msd/sifts/flatfiles/tsv/uniprot_segments_observed.tsv.gz
 wget -O data/disprot/go-basic.obo http://purl.obolibrary.org/obo/go/go-basic.obo
 ```
